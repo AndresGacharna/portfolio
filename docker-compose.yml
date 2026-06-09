@@ -1,0 +1,12 @@
+services:
+  portfolio:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: portfolio-app
+    restart: always
+    ports:
+      - "3000:3000" # Expone el puerto 3000 del contenedor al puerto 3000 de tu máquina/VM
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
