@@ -25,7 +25,7 @@ interface TechCategory {
 const categories: TechCategory[] = [
   {
     key: "tech.cat.frameworks",
-    name: "Frameworks",
+    name: "Frameworks - Libraries",
     techs: [
       { icon: "🦁", image: "/images/Logos/NestJS.svg", name: "NestJS" },
       {
@@ -38,24 +38,7 @@ const categories: TechCategory[] = [
         image: "/images/Logos/nodejs_original_logo_icon_146411.webp",
         name: "Node.js",
       },
-      { icon: "▲", name: "Next.js" },
       { icon: "⚛️", image: "/images/Logos/React-icon.svg.png", name: "React" },
-    ],
-  },
-  {
-    key: "tech.cat.architecture",
-    name: "Architecture & Concepts",
-    techs: [
-      { icon: "🧩", name: "Microservices" },
-      {
-        icon: "🕸️",
-        image: "/images/Logos/GraphQL_Logo.svg.png",
-        name: "GraphQL",
-      },
-      { icon: "🔌", name: "REST APIs" },
-      { icon: "⚡", name: "WebSockets" },
-      { icon: "🤖", name: "AI Integrations" },
-      { icon: "🧱", name: "Layered Architecture" },
     ],
   },
   {
@@ -83,6 +66,29 @@ const categories: TechCategory[] = [
     ],
   },
   {
+    key: "tech.cat.languages",
+    name: "Languages",
+    techs: [
+      {
+        icon: "🔷",
+        image: "/images/Logos/Typescript_logo_2020.svg",
+        name: "TypeScript",
+      },
+      {
+        icon: "💜",
+        image: "/images/Logos/Csharp_Logo.png",
+        name: "C#",
+        width: 36,
+        height: 36,
+      },
+      {
+        icon: "🐍",
+        image: "/images/Logos/Python-logo-notext.svg.png",
+        name: "Python",
+      },
+    ],
+  },
+  {
     key: "tech.cat.databases",
     name: "Databases",
     techs: [
@@ -107,26 +113,19 @@ const categories: TechCategory[] = [
     ],
   },
   {
-    key: "tech.cat.languages",
-    name: "Languages",
+    key: "tech.cat.architecture",
+    name: "Architecture & Concepts",
     techs: [
+      { icon: "🧩", name: "Microservices" },
       {
-        icon: "🔷",
-        image: "/images/Logos/Typescript_logo_2020.svg",
-        name: "TypeScript",
+        icon: "🕸️",
+        image: "/images/Logos/GraphQL_Logo.svg.png",
+        name: "GraphQL",
       },
-      {
-        icon: "💜",
-        image: "/images/Logos/Csharp_Logo.png",
-        name: "C#",
-        width: 36,
-        height: 36,
-      },
-      {
-        icon: "🐍",
-        image: "/images/Logos/Python-logo-notext.svg.png",
-        name: "Python",
-      },
+      { icon: "🔌", name: "REST APIs" },
+      { icon: "⚡", name: "WebSockets" },
+      { icon: "🤖", name: "AI Integrations" },
+      { icon: "🧱", name: "Layered Architecture" },
     ],
   },
 ];

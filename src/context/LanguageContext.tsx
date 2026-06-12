@@ -71,7 +71,7 @@ const translations = {
     // Tech Stack
     "tech.label": "// habilidades",
     "tech.title": "Tech Stack",
-    "tech.cat.frameworks": "Frameworks",
+    "tech.cat.frameworks": "Frameworks - Librerías",
     "tech.cat.architecture": "Architecture & Concepts",
     "tech.cat.devops": "DevOps & Tools",
     "tech.cat.languages": "Languages",
@@ -212,7 +212,7 @@ const translations = {
     // Tech Stack
     "tech.label": "// skills",
     "tech.title": "Tech Stack",
-    "tech.cat.frameworks": "Frameworks",
+    "tech.cat.frameworks": "Frameworks - Libraries",
     "tech.cat.architecture": "Architecture & Concepts",
     "tech.cat.devops": "DevOps & Tools",
     "tech.cat.languages": "Languages",
@@ -319,13 +319,13 @@ const translations = {
         <span style={{ fontWeight: 1000 }}>Engenheiro de Software</span> focado
         em <span style={{ fontWeight: 1000 }}>soluções de negócios</span>. Não
         apenas transformo ideias em código funcional, eu me aprofundo na{" "}
-        <span style={{ fontWeight: 1000 }}>lógica e nas necessidades</span> de cada
-        cliente para estruturar soluções alinhadas com seus{" "}
-        <span style={{ fontWeight: 1000 }}>objetivos reais</span>. Minha abordagem
-        vai desde a{" "}
-        <span style={{ fontWeight: 1000 }}>conversa estratégica</span> até
-        o <span style={{ fontWeight: 1000 }}>deploy técnico</span>,
-        garantindo que cada linha de código traga{" "}
+        <span style={{ fontWeight: 1000 }}>lógica e nas necessidades</span> de
+        cada cliente para estruturar soluções alinhadas com seus{" "}
+        <span style={{ fontWeight: 1000 }}>objetivos reais</span>. Minha
+        abordagem vai desde a{" "}
+        <span style={{ fontWeight: 1000 }}>conversa estratégica</span> até o{" "}
+        <span style={{ fontWeight: 1000 }}>deploy técnico</span>, garantindo que
+        cada linha de código traga{" "}
         <span style={{ fontWeight: 1000 }}>valor real e escalável</span>.
       </>
     ),
@@ -354,7 +354,7 @@ const translations = {
     // Tech Stack
     "tech.label": "// habilidades",
     "tech.title": "Tech Stack",
-    "tech.cat.frameworks": "Frameworks",
+    "tech.cat.frameworks": "Frameworks - Bibliotecas",
     "tech.cat.architecture": "Architecture & Concepts",
     "tech.cat.devops": "DevOps & Tools",
     "tech.cat.languages": "Languages",
