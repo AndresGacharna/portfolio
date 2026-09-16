@@ -94,6 +94,13 @@ const translations = {
       "Aplicación móvil de cupones y domicilios desarrollada para la comunidad de la Universidad Jorge Tadeo Lozano, destacada en la Feria Tadeista.",
     "projects.desc5":
       "Fine-tuning de una red neuronal ResNet. (Puedes encontrar este proyecto en la página 3 de la publicación de los proyectos del curso).",
+    "projects.desc6":
+      "Sistema distribuido de e-commerce con cinco microservicios NestJS comunicados de forma asíncrona por NATS, cada uno con su propia base de datos. Incluye pagos con Stripe vía webhook, empaquetado en Docker y manifiestos de Kubernetes.",
+    "projects.name6": "Tienda — Microservicios con NestJS",
+    "projects.name7": "AnyList — API GraphQL con NestJS",
+    "projects.badgeUtadeo": "Proyecto universitario · Utadeo",
+    "projects.desc7":
+      "API de listas de compra construida con NestJS y GraphQL sobre Apollo Server, con persistencia en PostgreSQL mediante TypeORM. Incluye autenticación JWT con roles, argumentos reutilizables de paginación y búsqueda, y seed de datos de prueba.",
 
     // Experience
     "exp.label": "// trayectoria",
@@ -235,6 +242,13 @@ const translations = {
       "Mobile coupon and delivery application developed for the Universidad Jorge Tadeo Lozano community, featured at the Tadeista Fair.",
     "projects.desc5":
       "Fine-tuning of a ResNet neural network. (You can find this project on page 3 of the course projects publication).",
+    "projects.desc6":
+      "Distributed e-commerce system with five NestJS microservices communicating asynchronously over NATS, each with its own database. Includes Stripe payments via webhook, Docker packaging, and Kubernetes manifests.",
+    "projects.name6": "Store — Microservices with NestJS",
+    "projects.name7": "AnyList — GraphQL API with NestJS",
+    "projects.badgeUtadeo": "University project · Utadeo",
+    "projects.desc7":
+      "Shopping list API built with NestJS and GraphQL on Apollo Server, persisted in PostgreSQL through TypeORM. Includes JWT authentication with roles, reusable pagination and search arguments, and a test data seed.",
 
     // Experience
     "exp.label": "// experience",
@@ -377,6 +391,13 @@ const translations = {
       "Aplicativo móvel de cupons e entregas desenvolvido para a comunidade da Universidad Jorge Tadeo Lozano, destacado na Feria Tadeista.",
     "projects.desc5":
       "Fine-tuning de uma rede neural ResNet. (Você pode encontrar este projeto na página 3 da publicação dos projetos do curso).",
+    "projects.desc6":
+      "Sistema distribuído de e-commerce com cinco microsserviços NestJS comunicando-se de forma assíncrona via NATS, cada um com seu próprio banco de dados. Inclui pagamentos com Stripe via webhook, empacotamento em Docker e manifestos de Kubernetes.",
+    "projects.name6": "Loja — Microsserviços com NestJS",
+    "projects.name7": "AnyList — API GraphQL com NestJS",
+    "projects.badgeUtadeo": "Projeto universitário · Utadeo",
+    "projects.desc7":
+      "API de listas de compras construída com NestJS e GraphQL sobre Apollo Server, com persistência em PostgreSQL via TypeORM. Inclui autenticação JWT com funções, argumentos reutilizáveis de paginação e busca, e seed de dados de teste.",
 
     // Experience
     "exp.label": "// trajetória",
@@ -448,7 +469,7 @@ const translations = {
 };
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguage] = useState<Language>("es");
+  const [language, setLanguage] = useState<Language>("en");
 
   useEffect(() => {
     try {

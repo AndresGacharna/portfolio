@@ -76,17 +76,17 @@ export default function Navbar() {
 
           <div className={styles.langContainer}>
             <button
-              className={`${styles.langButton} ${language === 'es' ? styles.langButtonActive : ''}`}
-              onClick={() => setLanguage('es')}
-            >
-              ES
-            </button>
-            <span className={styles.langDivider}>|</span>
-            <button
               className={`${styles.langButton} ${language === 'en' ? styles.langButtonActive : ''}`}
               onClick={() => setLanguage('en')}
             >
               EN
+            </button>
+            <span className={styles.langDivider}>|</span>
+            <button
+              className={`${styles.langButton} ${language === 'es' ? styles.langButtonActive : ''}`}
+              onClick={() => setLanguage('es')}
+            >
+              ES
             </button>
             <span className={styles.langDivider}>|</span>
             <button
