@@ -1,128 +1,89 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import styles from './Navbar.module.css';
-import { useLanguage } from '@/context/LanguageContext';
+import { useEffect, useState } from "react";
+import styles from "./Navbar.module.css";
+import { useLanguage, type Language } from "@/context/LanguageContext";
 
-const navLinks = [
-  { key: 'about', href: '#about' },
-  { key: 'skills', href: '#skills' },
-  { key: 'projects', href: '#projects' },
-  { key: 'experience', href: '#experience' },
-  { key: 'contact', href: '#contact' },
-];
+const navLinks = ["projects", "experience", "stack", "about", "contact"];
+const languages: Language[] = ["en", "es", "pt"];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState('');
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
   const { language, setLanguage, t } = useLanguage();
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
+          if (entry.isIntersecting) setActiveSection(entry.target.id);
         });
       },
-      { rootMargin: '-40% 0px -55% 0px' }
+      { rootMargin: "-40% 0px -55% 0px" },
     );
-
-    const sections = document.querySelectorAll('section[id]');
-    sections.forEach((section) => observer.observe(section));
-
+    document
+      .querySelectorAll("section[id]")
+      .forEach((section) => observer.observe(section));
     return () => observer.disconnect();
   }, []);
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setMobileOpen(false);
-    }
-  };
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenuOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
 
   return (
-    <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}>
-      <div className={styles.inner}>
-        <a href="#" className={styles.logo} onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
-          &lt;A/&gt;
+    <header className={styles.bar}>
+      <nav className={`wrap ${styles.inner}`} aria-label="Main">
+        <a href="#top" className={styles.mark} onClick={() => setMenuOpen(false)}>
+          <span className={styles.markCode}>AGCU</span>
+          <span className={styles.markName}>Andrés Gacharná</span>
         </a>
 
-        <div className={styles.navActions}>
-          <div className={`${styles.links} ${mobileOpen ? styles.linksOpen : ''}`}>
-            {navLinks.map((link) => (
+        <ul
+          id="site-menu"
+          className={`${styles.links} ${menuOpen ? styles.linksOpen : ""}`}
+        >
+          {navLinks.map((key) => (
+            <li key={key}>
               <a
-                key={link.href}
-                href={link.href}
-                className={`${styles.link} ${activeSection === link.href.slice(1) ? styles.linkActive : ''}`}
-                onClick={(e) => handleNavClick(e, link.href)}
+                href={`#${key}`}
+                className={styles.link}
+                aria-current={activeSection === key ? "true" : undefined}
+                onClick={() => setMenuOpen(false)}
               >
-                {t(`nav.${link.key}`)}
+                {t(`nav.${key}`)}
               </a>
-            ))}
-          </div>
+            </li>
+          ))}
+        </ul>
 
-          <div className={styles.langContainer}>
+        <div className={styles.lang} role="group" aria-label={t("nav.language")}>
+          {languages.map((lang) => (
             <button
-              className={`${styles.langButton} ${language === 'en' ? styles.langButtonActive : ''}`}
-              onClick={() => setLanguage('en')}
+              key={lang}
+              type="button"
+              className={styles.langButton}
+              aria-pressed={language === lang}
+              onClick={() => setLanguage(lang)}
             >
-              EN
+              {lang.toUpperCase()}
             </button>
-            <span className={styles.langDivider}>|</span>
-            <button
-              className={`${styles.langButton} ${language === 'es' ? styles.langButtonActive : ''}`}
-              onClick={() => setLanguage('es')}
-            >
-              ES
-            </button>
-            <span className={styles.langDivider}>|</span>
-            <button
-              className={`${styles.langButton} ${language === 'pt' ? styles.langButtonActive : ''}`}
-              onClick={() => setLanguage('pt')}
-            >
-              PT
-            </button>
-          </div>
-
-          <button
-            className={styles.hamburger}
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
-          >
-            <span className={`${styles.hamburgerLine} ${mobileOpen ? styles.hamburgerOpen : ''}`} />
-            <span className={`${styles.hamburgerLine} ${mobileOpen ? styles.hamburgerOpen : ''}`} />
-            <span className={`${styles.hamburgerLine} ${mobileOpen ? styles.hamburgerOpen : ''}`} />
-          </button>
-        </div>
-      </div>
-
-      {mobileOpen && (
-        <div className={styles.mobileMenu}>
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className={`${styles.mobileLink} ${activeSection === link.href.slice(1) ? styles.linkActive : ''}`}
-              onClick={(e) => handleNavClick(e, link.href)}
-            >
-              {t(`nav.${link.key}`)}
-            </a>
           ))}
         </div>
-      )}
-    </nav>
+
+        <button
+          type="button"
+          className={styles.menuButton}
+          aria-expanded={menuOpen}
+          aria-controls="site-menu"
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          {menuOpen ? t("nav.close") : t("nav.menu")}
+        </button>
+      </nav>
+    </header>
   );
 }

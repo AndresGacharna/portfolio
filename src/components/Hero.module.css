@@ -1,302 +1,388 @@
-.hero {
-  min-height: 100vh;
+.door {
+  position: relative;
+  background-color: var(--paint-navy);
+  color: var(--on-dark);
+  min-height: calc(100svh - var(--nav-h));
   display: flex;
-  align-items: center;
-  position: relative;
   overflow: hidden;
-  padding-top: var(--nav-height);
+  /* top & bottom rails of the container frame */
+  box-shadow:
+    inset 0 14px 0 -4px var(--paint-navy-deep),
+    inset 0 -14px 0 -4px var(--paint-navy-deep);
 }
 
-.content {
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
-  gap: 4rem;
-  align-items: center;
-  width: 100%;
+.inner {
   position: relative;
-  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  padding-block: clamp(1.5rem, 3vw, 2.25rem) clamp(1.25rem, 2.5vw, 1.75rem);
 }
 
-.textSide {
-  animation: fadeInUp 0.8s ease 0.2s both;
+/* ---- ISO markings, top of the door ---- */
+.markings {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: clamp(1.4rem, 2.6vw, 2.2rem);
+  line-height: 1;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+  animation: spray 900ms var(--ease-out) 900ms backwards;
 }
 
-.greeting {
-  font-family: var(--font-mono);
-  font-size: var(--text-base);
-  color: var(--text-muted);
-  margin-bottom: 1.25rem;
+.code {
+  display: flex;
+  gap: 0.45em;
+  align-items: center;
 }
 
-.greetingSymbol {
-  color: var(--accent);
+.check {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.25em;
+  padding: 0.12em 0.2em 0.08em;
+  border: 3px solid currentColor;
+}
+
+.sizeType {
+  text-align: right;
+}
+
+/* ---- Name: the owner marking, at door scale ---- */
+.name {
+  margin-top: clamp(1rem, 3vh, 2rem);
+  font-family: var(--font-stencil);
+  font-weight: 900;
+  font-size: clamp(3.4rem, 9vw, 8.25rem);
+  line-height: 0.84;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  font-variation-settings: "opsz" 72;
+}
+
+.nameLine {
+  display: block;
+  animation: spray 1100ms var(--ease-out) backwards;
+}
+
+.nameLine + .nameLine {
+  animation-delay: 260ms;
+}
+
+.role {
+  margin-top: clamp(0.8rem, 2vh, 1.25rem);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.9rem;
+  font-family: var(--font-cond);
+  font-weight: 600;
+  font-size: var(--step-2);
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.role strong {
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--on-dark);
+  padding: 0.1em 0.35em 0.02em;
+}
+
+.roleSep {
+  width: 2.2rem;
+  height: 3px;
+  background: currentColor;
+}
+
+/* ---- Lower band: copy + consignee plate ---- */
+.lower {
+  margin-top: auto;
+  padding-top: clamp(1.25rem, 3.5vh, 2.25rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 280px);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: end;
+}
+
+.lede {
+  max-width: 60ch;
+  font-size: var(--step-1);
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+.proof {
+  margin-top: 1.1rem;
+  max-width: 44rem;
+  border-top: 2px solid rgba(246, 244, 238, 0.55);
+}
+
+.proof li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid rgba(246, 244, 238, 0.35);
+  font-family: var(--font-cond);
+  font-weight: 600;
+  font-size: 1.2rem;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+.proof li::before {
+  content: "";
+  flex: none;
+  width: 0.6rem;
+  height: 0.6rem;
+  background: var(--on-dark);
+  transform: translateY(-0.05em);
+}
+
+.handles {
+  margin-top: 1.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* Consignee plate: flat stamped plate, the photo as its ID */
+.plate {
+  position: relative;
+  background: var(--plate);
+  color: var(--ink);
+  padding: 1.1rem 1.1rem 1rem;
+  border: 2px solid var(--paint-navy-deep);
+  outline: 1px solid var(--ink-mute);
+  outline-offset: -7px;
+}
+
+.plateTitle {
+  font-family: var(--font-cond);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-align: center;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+.photo {
+  position: relative;
+  aspect-ratio: 1;
+  background: #fff;
+  border: 1px solid var(--plate-edge);
+  overflow: hidden;
+}
+
+.photo img {
+  object-fit: cover;
+  object-position: 50% 30%;
+}
+
+.plateRows {
+  margin-top: 0.75rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.2rem 0.75rem;
+  font-size: 0.85rem;
+  line-height: 1.3;
+}
+
+.plateRows dt {
+  font-family: var(--font-cond);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.plateRows dd {
   font-weight: 600;
 }
 
-.greetingString {
-  color: #ffb86c;
-}
-
-.name {
-  font-family: var(--font-pixel);
-  font-size: var(--text-xl);
-  color: var(--text);
-  line-height: 1.1;
-  min-height: 1.1em;
-  margin-bottom: 1rem;
-  letter-spacing: 0.02em;
-  word-break: break-word;
-}
-
-.titleWrapper {
-  display: flex;
+.next {
+  margin-top: clamp(1.25rem, 3vh, 2rem);
+  align-self: flex-start;
+  display: inline-flex;
   align-items: center;
-  margin-bottom: 1.75rem;
-  min-height: 2rem;
-}
-
-.titlePrefix {
-  font-family: var(--font-mono);
-  font-size: var(--text-base);
-  color: var(--text-dim);
-}
-
-.typewriter {
-  font-family: var(--font-pixel);
-  font-size: var(--text-base);
-  color: var(--accent);
-}
-
-.cursor {
-  display: inline-block;
-  width: 2px;
-  height: 1.3em;
-  background: var(--accent);
-  margin-left: 3px;
-  vertical-align: text-bottom;
-  box-shadow: 0 0 8px var(--accent-glow);
-  transition: opacity 0.1s;
-}
-
-.bio {
-  font-size: var(--text-base);
-  color: var(--text-muted);
-  line-height: 1.8;
-  margin-bottom: 2rem;
-  max-width: 520px;
-}
-
-.ctas {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-/* Photo Side */
-.photoSide {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  animation: fadeInUp 0.8s ease 0.4s both;
-}
-
-.photoContainer {
-  width: 480px;
-  height: 480px;
-  position: relative;
-  border-radius: 50%;
-}
-
-.photoGlow {
-  position: absolute;
-  inset: -8px;
-  border-radius: 50%;
-  background: conic-gradient(
-    from 0deg,
-    var(--accent),
-    transparent 30%,
-    transparent 70%,
-    var(--accent)
-  );
-  animation: spin 8s linear infinite;
-  opacity: 0.6;
-  filter: blur(6px);
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.photoInner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 2px solid rgba(255, 19, 76, 0.2);
-  z-index: 1;
-}
-
-.photoImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  animation: photoGlitch 5s infinite;
-}
-
-@keyframes photoGlitch {
-  0%,
-  15%,
-  17%,
-  45%,
-  47%,
-  100% {
-    transform: translate(0) scale(1);
-    filter: none;
-  }
-  15.5% {
-    transform: translate(-5px, 2px) scale(1.02);
-    filter: hue-rotate(90deg) contrast(150%) brightness(120%);
-  }
-  16% {
-    transform: translate(4px, -2px) scale(1.02);
-    filter: invert(1) hue-rotate(-50deg);
-  }
-  16.5% {
-    transform: translate(-2px, 5px) scale(1.01);
-    filter: hue-rotate(180deg) brightness(150%);
-  }
-  45.5% {
-    transform: translate(3px, 1px) scale(1.01);
-    filter: sepia(1) hue-rotate(200deg);
-  }
-  46.5% {
-    transform: translate(-3px, -1px) scale(1.01);
-    filter: hue-rotate(45deg);
-  }
-}
-
-.photoPlaceholder {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    135deg,
-    var(--bg-light) 0%,
-    var(--bg-lighter) 50%,
-    var(--bg-light) 100%
-  );
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.photoPlaceholderText {
-  font-family: var(--font-pixel);
-  font-size: var(--text-base);
-  color: var(--text-dim);
-  opacity: 0.5;
-}
-
-/* Decorative elements */
-.decorDot1 {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  background: var(--accent);
-  border-radius: 50%;
-  top: 10%;
-  right: 5%;
-  animation: float 4s ease-in-out infinite;
-  box-shadow: 0 0 12px var(--accent-glow);
-}
-
-.decorDot2 {
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  background: var(--accent);
-  border-radius: 50%;
-  bottom: 15%;
-  left: 10%;
-  animation: float 5s ease-in-out infinite 1s;
-  box-shadow: 0 0 8px var(--accent-glow);
-  opacity: 0.6;
-}
-
-.decorLine {
-  position: absolute;
-  width: 60px;
-  height: 2px;
-  background: linear-gradient(to right, var(--accent), transparent);
-  bottom: 25%;
-  right: 0;
-  opacity: 0.4;
-}
-
-/* Scroll Indicator */
-.scrollIndicator {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  animation: fadeIn 1s ease 1.5s both;
-}
-
-.scrollText {
-  font-family: var(--font-pixel);
-  font-size: var(--text-sm);
-  color: var(--text-dim);
+  gap: 0.45rem;
+  font-family: var(--font-cond);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
+  text-decoration: none;
+  border-bottom: 2px solid currentColor;
+  padding-bottom: 0.15rem;
 }
 
-.scrollLine {
-  width: 1px;
-  height: 40px;
-  background: linear-gradient(to bottom, var(--accent), transparent);
-  animation: pulse-glow 2s ease-in-out infinite;
+.next svg {
+  width: 1em;
+  height: 1em;
+  transition: transform 220ms var(--ease-out);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .content {
+.next:hover svg {
+  transform: translateY(3px);
+}
+
+/* Door hardware: seam, locking rods, cam keepers, handles. Flat paint. */
+.rods {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 65%;
+  width: 11%;
+  pointer-events: none;
+}
+
+.seam {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 4px;
+  background: var(--door-hardware);
+  box-shadow: 5px 0 0 -1px rgba(255, 255, 255, 0.08);
+}
+
+.rod {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 12%;
+  width: 7px;
+  background: var(--door-hardware);
+}
+
+.rod + .rod {
+  left: auto;
+  right: 12%;
+}
+
+.rod::before,
+.rod::after {
+  content: "";
+  position: absolute;
+  left: -9px;
+  width: 25px;
+  height: 18px;
+  background: var(--door-hardware);
+}
+
+.rod::before {
+  top: 5%;
+}
+
+.rod::after {
+  bottom: 5%;
+}
+
+.rodHandle {
+  position: absolute;
+  top: 58%;
+  left: 0;
+  width: 34px;
+  height: 9px;
+  background: var(--door-hardware);
+}
+
+.rodHandle::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  top: -14px;
+  width: 9px;
+  height: 36px;
+  background: var(--door-hardware);
+}
+
+.rod + .rod .rodHandle {
+  left: auto;
+  right: 0;
+}
+
+.rod + .rod .rodHandle::after {
+  right: auto;
+  left: -2px;
+}
+
+/* Below 1180px the door has no free column: hardware would cross the
+   name, proof or plate, so legibility wins and the rods stand down. */
+@media (max-width: 1180px) {
+  .rods {
+    display: none;
+  }
+}
+
+/* The signature: markings sprayed through the stencil */
+@keyframes spray {
+  from {
+    clip-path: inset(0 100% 0 0);
+    filter: blur(8px);
+    opacity: 0.4;
+  }
+  60% {
+    filter: blur(1.5px);
+    opacity: 1;
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 860px) {
+  .lower {
     grid-template-columns: 1fr;
-    gap: 2rem;
-    text-align: center;
+    align-items: start;
   }
 
-  .textSide {
-    order: 2;
+  .plate {
+    display: grid;
+    grid-template-columns: 112px 1fr;
+    grid-template-rows: auto 1fr;
+    column-gap: 1rem;
+    max-width: 30rem;
   }
 
-  .photoSide {
-    order: 1;
+  .plateTitle {
+    grid-column: 1 / -1;
+    text-align: left;
   }
 
-  .photoContainer {
-    width: 340px;
-    height: 340px;
+  .plateRows {
+    margin-top: 0;
+    align-content: center;
+    grid-template-columns: 1fr;
   }
 
-  .bio {
-    margin-left: auto;
-    margin-right: auto;
+  .plateRows dd + dt {
+    margin-top: 0.4rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .handles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
 
-  .ctas {
+  .handles > :first-child {
+    grid-column: 1 / -1;
     justify-content: center;
   }
 
-  .decorDot1,
-  .decorDot2,
-  .decorLine {
-    display: none;
+  .proof li {
+    font-size: 1.08rem;
   }
 }

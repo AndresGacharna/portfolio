@@ -9,493 +9,419 @@ import React, {
   useCallback,
 } from "react";
 
-type Language = "es" | "en" | "pt";
+export type Language = "es" | "en" | "pt";
 
 interface LanguageContextProps {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (key: string) => any;
+  t: (key: string) => string;
 }
 
 const LanguageContext = createContext<LanguageContextProps | undefined>(
   undefined,
 );
 
-const translations = {
-  es: {
-    // Nav
-    "nav.about": "Sobre mí",
-    "nav.skills": "Habilidades",
-    "nav.projects": "Proyectos",
-    "nav.experience": "Experiencia",
-    "nav.contact": "Contacto",
-
-    // Hero
-    "hero.console": "Bienvenidos a mi portfolio!",
-    "hero.bio": (
-      <>
-        <span style={{ fontWeight: 1000 }}>Ingeniero de Software</span> enfocado
-        en <span style={{ fontWeight: 1000 }}>soluciones de negocio</span>. No
-        solo transformo ideas en código funcional, me sumerjo en la{" "}
-        <span style={{ fontWeight: 1000 }}>lógica y necesidades</span> de cada
-        cliente para estructurar soluciones alineadas con sus{" "}
-        <span style={{ fontWeight: 1000 }}>objetivos reales</span>. Mi enfoque
-        va desde la{" "}
-        <span style={{ fontWeight: 1000 }}>conversación estratégica</span> hasta
-        el <span style={{ fontWeight: 1000 }}>despliegue técnico</span>,
-        asegurando que cada línea de código aporte{" "}
-        <span style={{ fontWeight: 1000 }}>valor real y escalable</span>.
-      </>
-    ),
-    "hero.btnPrimary": "Ver Proyectos",
-    "hero.btnOutline": "Contacto",
-    "hero.title0": "Desarrollador Full Stack",
-    "hero.title1": "Entusiasta UI/UX",
-    "hero.title2": "Ingeniero Creativo",
-    "hero.title3": "Solucionador de Problemas",
-
-    // About
-    "about.label": "// sobre mí",
-    "about.title": "Sobre Mí",
-    "about.whoami":
-      "Soy un Ingeniero de Sistemas especializado en Backend (.NET, Node.js & NestJS). Me apasiona crear arquitecturas limpias, escalables y funcionales. Disfruto el mundo del DevOps, administrando clusters con Proxmox, Docker y Linux para llevar el código de la idea a producción.",
-    "about.interests": "const intereses = [",
-    "about.certifications":
-      "- Fortinet Certified Associate en Ciberseguridad\n- Scrum Fundamentals Certified\n- NestJS & Microservicios (Udemy)\n- API OpenAI & React (Udemy)\n- Fundamentos de Marketing Digital (Google)",
-    "about.status": "Preparado para mejorar e innovar proyectos",
-    "about.stat0": "De Experiencia",
-    "about.stat1": "Certificaciones",
-    "about.stat2": "Tecnologías",
-    "about.stat3": "Tazas de Café",
-
-    // Tech Stack
-    "tech.label": "// habilidades",
-    "tech.title": "Tech Stack",
-    "tech.cat.frameworks": "Frameworks - Librerías",
-    "tech.cat.architecture": "Architecture & Concepts",
-    "tech.cat.devops": "DevOps & Tools",
-    "tech.cat.languages": "Languages",
-    "tech.cat.databases": "Databases",
-    "tech.layered": "Arquitectura por Capas",
-
-    // Projects
-    "projects.label": "// trabajo",
-    "projects.title": "Proyectos",
-    "projects.btnDemo": "👁️ Echar un vistazo",
-    "projects.desc0":
-      "Infraestructura de nube personal gestionada con Proxmox VE. Incluye VPN privada (Tailscale), Nginx Proxy Manager, y entornos Docker para experimentación y microservicios.",
-    "projects.desc1":
-      "Aplicación de gestión de tareas con drag & drop, colaboración en tiempo real y notificaciones.",
-    "projects.desc2":
-      "Herramienta para generar portafolios profesionales con templates personalizables y deploy automático.",
-    "projects.desc3":
-      "Chat en tiempo real con soporte para grupos, archivos compartidos y videollamadas.",
-    "projects.desc4":
-      "Aplicación móvil de cupones y domicilios desarrollada para la comunidad de la Universidad Jorge Tadeo Lozano, destacada en la Feria Tadeista.",
-    "projects.desc5":
-      "Fine-tuning de una red neuronal ResNet. (Puedes encontrar este proyecto en la página 3 de la publicación de los proyectos del curso).",
-    "projects.desc6":
-      "Sistema distribuido de e-commerce con cinco microservicios NestJS comunicados de forma asíncrona por NATS, cada uno con su propia base de datos. Incluye pagos con Stripe vía webhook, empaquetado en Docker y manifiestos de Kubernetes.",
-    "projects.name6": "Tienda — Microservicios con NestJS",
-    "projects.name7": "AnyList — API GraphQL con NestJS",
-    "projects.badgeUtadeo": "Proyecto universitario · Utadeo",
-    "projects.desc7":
-      "API de listas de compra construida con NestJS y GraphQL sobre Apollo Server, con persistencia en PostgreSQL mediante TypeORM. Incluye autenticación JWT con roles, argumentos reutilizables de paginación y búsqueda, y seed de datos de prueba.",
-
-    // Experience
-    "exp.label": "// trayectoria",
-    "exp.title": "Journey",
-    "exp.date0": "Dic. 2024 - Presente",
-    "exp.role0": "Software Engineer / Backend Developer",
-    "exp.desc0":
-      "Desarrollo de soluciones backend robustas y escalables orientadas a microservicios. Participación en el ciclo de vida del desarrollo de software, aplicando buenas prácticas y arquitecturas limpias.",
-    "exp.date1": "2022 - Mar. 2026",
-    "exp.role1": "Formación - Ingeniería de Sistemas",
-    "exp.desc1":
-      "Desarrollo de bases sólidas en programación, algoritmos y resolución de problemas. Enfoque en arquitectura de software y metodologías formales.",
-    "exp.date2": "Ene. 2024",
-    "exp.role2": "Desarrollo de Visión de Negocio",
-    "exp.desc2":
-      "Certificación en Creación de empresas. Aprendizaje sobre cómo dirigir negocios rentables, conectando las soluciones técnicas con los objetivos clave de la empresa.",
-    "exp.date3": "2023 - 2025",
-    "exp.role3": "Backend & Ciberseguridad",
-    "exp.desc3":
-      "Certificaciones robustas en NestJS, diseño de Microservicios, implementación de GraphQL y ciberseguridad mediante Fortinet.",
-    "exp.date4": "2026 - Presente",
-    "exp.role4": "Proxmox, Docker & Infraestructura",
-    "exp.desc4":
-      "Administración de Centro de Datos propio utilizando Proxmox. Configuración de VPNs, servicios en nube privada y despliegues con contenedores Docker para entornos controlados de microservicios.",
-
-    "exp.date5": "Expedición: feb. 2025",
-    "exp.role5": "Nest: Desarrollo backend escalable con Node",
-    "exp.desc5":
-      "Curso práctico de NestJS en Udemy. Construcción de APIs REST robustas y escalables usando Node.js con el framework NestJS.",
-
-    "exp.date6": "Expedición: sept. 2025",
-    "exp.role6": "NestJS + Microservicios: Aplicaciones escalables y modulares",
-    "exp.desc6":
-      "Diseño e implementación de arquitecturas de microservicios con NestJS, comunicación entre servicios y patrones de escalabilidad.",
-
-    "exp.date7": "Expedición: oct. 2025",
-    "exp.role7": "Nest + GraphQL: Evoluciona tus APIs",
-    "exp.desc7":
-      "Integración de GraphQL en aplicaciones NestJS para construir APIs flexibles y eficientes.",
-
-    "exp.date8": "Expedición: oct. 2025",
-    "exp.role8": "OpenAI: Ejercicios prácticos y asistentes con React + NestJS",
-    "exp.desc8":
-      "Integración de la API de OpenAI para desarrollar asistentes inteligentes usando React en el frontend y NestJS en el backend.",
-
-    "exp.date9": "Expedición: nov. 2025",
-    "exp.role9": "Scrum Fundamentals Certified",
-    "exp.desc9":
-      "Certificación en los fundamentos de la metodología Scrum, incluyendo roles, eventos y artefactos del framework ágil.",
-
-    "exp.date10": "Expedición: nov. 2025 · Vencimiento: nov. 2027",
-    "exp.role10": "Fortinet Certified Associate in Cybersecurity",
-    "exp.desc10":
-      "Certificación oficial de Fortinet en ciberseguridad, cubriendo fundamentos de seguridad de redes, amenazas y controles de defensa.",
-
-    // Contact
-    "contact.label": "// contacto",
-    "contact.title": "Get In Touch",
-    "contact.cardTitle": "¿Preparado para subir de nivel?",
-    "contact.cardText": "¡Construyamos algo juntos!",
-
-    // Footer
-    "footer.tagline": "Creado con pasión & píxeles",
-    "footer.nav": "Navegación",
-    "footer.connect": "Contacto",
-    "footer.madeWith": "Hecho con ♥ y mucho ☕",
-    "footer.copyright": "© {year} Andrés Gacharná.",
-  },
+const translations: Record<Language, Record<string, string>> = {
   en: {
     // Nav
-    "nav.about": "About",
-    "nav.skills": "Skills",
     "nav.projects": "Projects",
     "nav.experience": "Experience",
+    "nav.stack": "Stack",
+    "nav.about": "About",
     "nav.contact": "Contact",
+    "nav.menu": "Menu",
+    "nav.close": "Close",
+    "nav.language": "Language",
 
     // Hero
-    "hero.console": "Welcome to my portfolio!",
-    "hero.bio": (
-      <>
-        <span style={{ fontWeight: 1000 }}>Software Engineer</span> focused on{" "}
-        <span style={{ fontWeight: 1000 }}>business solutions</span>. Not only
-        do I transform ideas into functional code, I immerse myself in the{" "}
-        <span style={{ fontWeight: 1000 }}>logic and needs</span> of each client
-        to structure solutions aligned with their{" "}
-        <span style={{ fontWeight: 1000 }}>real objectives</span>. My approach
-        goes from{" "}
-        <span style={{ fontWeight: 1000 }}>strategic conversation</span> to{" "}
-        <span style={{ fontWeight: 1000 }}>technical deployment</span>, ensuring
-        every line of code adds{" "}
-        <span style={{ fontWeight: 1000 }}>real and scalable value</span>.
-      </>
-    ),
-    "hero.btnPrimary": "View Projects",
-    "hero.btnOutline": "Contact",
-    "hero.title0": "Full Stack Developer",
-    "hero.title1": "UI/UX Enthusiast",
-    "hero.title2": "Creative Engineer",
-    "hero.title3": "Problem Solver",
-
-    // About
-    "about.label": "// about",
-    "about.title": "About Me",
-    "about.whoami":
-      "I am a Systems Engineer specializing in Backend (.NET, Node.js & NestJS). I am passionate about creating clean, scalable and functional architectures. I enjoy the DevOps world, managing clusters with Proxmox, Docker, and Linux to take code from idea to production.",
-    "about.interests": "const interests = [",
-    "about.certifications":
-      "- Fortinet Certified Associate in Cybersecurity\n- Scrum Fundamentals Certified\n- NestJS & Microservices (Udemy)\n- OpenAI API & React (Udemy)\n- Fundamentals of Digital Marketing (Google)",
-    "about.status": "Ready to improve and innovate projects",
-    "about.stat0": "Of Experience",
-    "about.stat1": "Certifications",
-    "about.stat2": "Technologies",
-    "about.stat3": "Cups of Coffee",
-    "about.stat4": "Years of Experience",
-
-    // Tech Stack
-    "tech.label": "// skills",
-    "tech.title": "Tech Stack",
-    "tech.cat.frameworks": "Frameworks - Libraries",
-    "tech.cat.architecture": "Architecture & Concepts",
-    "tech.cat.devops": "DevOps & Tools",
-    "tech.cat.languages": "Languages",
-    "tech.cat.databases": "Databases",
-    "tech.layered": "Layered Architecture",
+    "hero.role": "Software Engineer",
+    "hero.focus": "From solution to production",
+    "hero.lede":
+      "I start from the business problem, then design and ship to production the solution that solves it: NestJS, .NET, microservices, Clean Architecture. I also run my own infrastructure: this site is served from my Proxmox homelab.",
+    "hero.proof0": "Monolith → microservices, live in 3 international markets",
+    "hero.proof1": "~70% faster reporting for enterprise retail operations",
+    "hero.proof2": "1st place, RISKTECH corporate hackathon 2025",
+    "hero.email": "Email me",
+    "hero.cv": "Download CV",
+    "hero.location": "Bogotá, Colombia",
+    "hero.plateTitle": "Consignee",
+    "hero.plateName": "Name",
+    "hero.platePort": "Port",
+    "hero.next": "See the work",
 
     // Projects
-    "projects.label": "// work",
     "projects.title": "Projects",
-    "projects.btnDemo": "👁️ Take a look",
-    "projects.desc0":
-      "Personal cloud infrastructure managed with Proxmox VE. Includes private VPN (Tailscale), Nginx Proxy Manager, and Docker environments for experimentation and microservices.",
-    "projects.desc1":
-      "Task management application featuring drag & drop, real-time collaboration, and notifications.",
-    "projects.desc2":
-      "A tool for generating professional portfolios with customizable templates and automated deployment.",
-    "projects.desc3":
-      "Real-time chat application with support for groups, file sharing, and video calls.",
-    "projects.desc4":
-      "Mobile coupon and delivery application developed for the Universidad Jorge Tadeo Lozano community, featured at the Tadeista Fair.",
-    "projects.desc5":
-      "Fine-tuning of a ResNet neural network. (You can find this project on page 3 of the course projects publication).",
-    "projects.desc6":
-      "Distributed e-commerce system with five NestJS microservices communicating asynchronously over NATS, each with its own database. Includes Stripe payments via webhook, Docker packaging, and Kubernetes manifests.",
-    "projects.name6": "Store — Microservices with NestJS",
-    "projects.name7": "AnyList — GraphQL API with NestJS",
+    "projects.intro":
+      "Systems I have designed and shipped, with the code wherever I can share it.",
+    "projects.contents": "Contents",
+    "projects.repo": "Repository",
+    "projects.repos": "Repositories",
+    "projects.post": "LinkedIn post",
+    "projects.video": "Video demo",
+    "projects.figmaClient": "Figma · client app",
+    "projects.figmaOwner": "Figma · store owners",
+    "projects.private": "Private infrastructure. Walkthrough on request.",
+    "projects.noLinks": "Hackathon code under the organizer's terms.",
     "projects.badgeUtadeo": "University project · Utadeo",
-    "projects.desc7":
-      "Shopping list API built with NestJS and GraphQL on Apollo Server, persisted in PostgreSQL through TypeORM. Includes JWT authentication with roles, reusable pagination and search arguments, and a test data seed.",
+    "projects.badgeWinner": "1st place · RISKTECH hackathon",
+    "projects.badgeLive": "Serving this site",
+
+    "projects.store.name": "Store: NestJS microservices",
+    "projects.store.desc":
+      "Distributed e-commerce with five NestJS microservices talking asynchronously over NATS, each with its own database. Stripe payments via webhook, Docker images and Kubernetes manifests.",
+    "projects.fraud.name": "Real-time fraud detection engine",
+    "projects.fraud.desc":
+      "Built in 48 hours for banking POS transactions: a NestJS + Python + PostgreSQL ingestion API, CatBoost for sub-second scoring with fallback to a BERT encoder on borderline cases, and LLM-driven feature enrichment into structured JSON.",
+    "projects.homelab.name": "Self-hosted cloud (Proxmox VE)",
+    "projects.homelab.desc":
+      "Virtualization on Proxmox VE with Debian LXC containers and Docker to host and test microservices. Zero-trust networking with Cloudflare Tunnels, custom DNS, automatic TLS through Nginx Proxy Manager and isolated subnets. This portfolio deploys here from GitHub Actions.",
+    "projects.anylist.name": "AnyList: GraphQL API with NestJS",
+    "projects.anylist.desc":
+      "Shopping-list API on NestJS and Apollo GraphQL, persisted in PostgreSQL through TypeORM. JWT authentication with roles, reusable pagination and search arguments, and a seed for test data.",
+    "projects.utadelicias.name": "Utadelicias",
+    "projects.utadelicias.desc":
+      "Coupons and delivery Android app for the Universidad Jorge Tadeo Lozano community, featured at the Feria Tadeísta.",
+    "projects.resnet.name": "ResNet fine-tuning",
+    "projects.resnet.desc":
+      "Fine-tuning of a ResNet neural network for image classification. The project appears on page 3 of the course publication linked below.",
 
     // Experience
-    "exp.label": "// experience",
-    "exp.title": "Journey",
-    "exp.date0": "Dec. 2024 - Present",
-    "exp.role0": "Software Engineer / Backend Developer",
-    "exp.desc0":
-      "Development of robust and scalable backend solutions oriented towards microservices. Participation in the software development lifecycle, applying best practices and clean architectures.",
-    "exp.date1": "2022 - Mar. 2026",
-    "exp.role1": "Education - Systems Engineering",
-    "exp.desc1":
-      "Development of a solid foundation in programming, algorithms, and problem-solving. Focus on software architecture and formal methodologies.",
-    "exp.date2": "Jan. 2024",
-    "exp.role2": "Business Vision Development",
-    "exp.desc2":
-      "Certification in Entrepreneurship. Learning how to direct profitable businesses, connecting technical solutions with key company goals.",
-    "exp.date3": "2023 - 2025",
-    "exp.role3": "Backend & Cybersecurity",
-    "exp.desc3":
-      "Robust certifications in NestJS, Microservices design, GraphQL implementation, and cybersecurity through Fortinet.",
-    "exp.date4": "2026 - Present",
-    "exp.role4": "Proxmox, Docker & Infrastructure",
-    "exp.desc4":
-      "Administration of self-owned Data Center using Proxmox. Configuration of VPNs, private cloud services, and deployments with Docker containers for controlled microservices environments.",
+    "exp.title": "Experience",
+    "exp.intro": "Where the work above comes from.",
+    "exp.present": "Present",
+    "exp.colPeriod": "Period",
+    "exp.colCompany": "Company",
+    "exp.colWork": "Work carried",
+    "exp.geekcore.role": "Software Engineer",
+    "exp.geekcore.period": "Dec 2024 – Present",
+    "exp.geekcore.b0":
+      "Architected and shipped GraphQL and REST APIs with NestJS and ASP.NET Core for a multinational retail operation, automating personnel workflows and centralizing supplier and store data. Reporting turnaround dropped by ~70%.",
+    "exp.geekcore.b1":
+      "Decomposed a legacy enterprise monolith into modular microservices, enabling horizontal scaling and a rollout across 3 international markets.",
+    "exp.geekcore.b2":
+      "Built tracking services for healthcare logistics: PostgreSQL schemas designed for the workload and automated CI/CD pipelines for continuous availability.",
+    "exp.geekcore.b3":
+      "Unit and integration test suites under Clean Architecture and SOLID across multi-tenant production systems; sprint planning, architecture reviews and backlog refinement in Agile teams.",
+    "exp.utadeo.role": "B.Sc. Systems Engineering",
+    "exp.utadeo.period": "2022 – Mar 2026",
+    "exp.utadeo.b0":
+      "Graduated March 2026. Software architecture, algorithms and formal methods; university projects shipped to real users (Utadelicias) and ML research (ResNet).",
 
-    "exp.date5": "Feb. 2025",
-    "exp.role5": "Nest: Scalable Backend Development with Node",
-    "exp.desc5":
-      "Practical NestJS course on Udemy. Building robust and scalable REST APIs using Node.js with the NestJS framework.",
+    // Stack
+    "stack.title": "Stack",
+    "stack.intro":
+      "Stowed by category. Solid blocks are my daily work; outlined ones I have used in real projects.",
+    "stack.cat.core": "Languages & frameworks",
+    "stack.cat.arch": "Architecture",
+    "stack.cat.data": "Data",
+    "stack.cat.infra": "Infrastructure & DevOps",
+    "stack.cat.ai": "AI-assisted engineering",
+    "stack.primary": "Daily work",
+    "stack.secondary": "Used in projects",
 
-    "exp.date6": "Sept. 2025",
-    "exp.role6": "NestJS + Microservices: Scalable and Modular Applications",
-    "exp.desc6":
-      "Design and implementation of microservices architectures with NestJS, inter-service communication, and scalability patterns.",
-
-    "exp.date7": "Oct. 2025",
-    "exp.role7": "Nest + GraphQL: Evolve Your APIs",
-    "exp.desc7":
-      "Integration of GraphQL in NestJS applications to build flexible and efficient APIs.",
-
-    "exp.date8": "Oct. 2025",
-    "exp.role8":
-      "OpenAI: Practical Exercises and Assistants with React + NestJS",
-    "exp.desc8":
-      "Integration of the OpenAI API to develop intelligent assistants using React on the frontend and NestJS on the backend.",
-
-    "exp.date9": "Nov. 2025",
-    "exp.role9": "Scrum Fundamentals Certified",
-    "exp.desc9":
-      "Certification in the fundamentals of the Scrum methodology, including roles, events, and artifacts of the agile framework.",
-
-    "exp.date10": "Nov. 2025 · Expires: Nov. 2027",
-    "exp.role10": "Fortinet Certified Associate in Cybersecurity",
-    "exp.desc10":
-      "Official Fortinet cybersecurity certification covering network security fundamentals, threat landscape, and defense controls.",
+    // About
+    "about.title": "About",
+    "about.p0":
+      "I'm a Systems Engineer who specializes in backend: .NET, Node.js and NestJS. I care about architectures that stay clean when the business changes, and about understanding what the client actually needs before writing the first endpoint.",
+    "about.p1":
+      "Outside work I run a small data center at home. Proxmox, Docker and Linux are how I take code from idea to production without asking anyone for a server.",
+    "about.p2":
+      "AI is part of my toolchain, not a buzzword: I orchestrate coding agents with herdr and work daily with Claude Code, Codex, Gemini in Antigravity and OpenCode.",
+    "about.languages": "Languages",
+    "about.spanish": "Spanish, native",
+    "about.english": "English, professional working proficiency (B2)",
+    "about.certs": "Certifications",
+    "about.courses": "Courses",
+    "about.expires": "valid to Nov 2027",
+    "about.coursesList":
+      "Udemy, 2025: NestJS scalable backend · NestJS + microservices · Nest + GraphQL · OpenAI assistants with React + NestJS",
 
     // Contact
-    "contact.label": "// contact",
-    "contact.title": "Get In Touch",
-    "contact.cardTitle": "Ready to Level Up?",
-    "contact.cardText": "Let's Build Something Together",
+    "contact.title": "Let's build something",
+    "contact.text":
+      "Open to backend roles and freelance projects. Tell me what the system has to do and I'll tell you how I'd build it.",
+    "contact.copy": "Copy email",
+    "contact.copied": "Copied",
 
     // Footer
-    "footer.tagline": "Built with passion & pixels",
-    "footer.nav": "Navigation",
-    "footer.connect": "Connect",
-    "footer.madeWith": "Made with ♥ and lots of ☕",
-    "footer.copyright": "© {year} Andrés Gacharná.",
+    "footer.copyright": "© {year} Andrés Gacharná",
+    "footer.hosting":
+      "Served from my own Proxmox homelab · deployed with GitHub Actions",
+    "footer.top": "Back to top",
+  },
+  es: {
+    "nav.projects": "Proyectos",
+    "nav.experience": "Experiencia",
+    "nav.stack": "Stack",
+    "nav.about": "Sobre mí",
+    "nav.contact": "Contacto",
+    "nav.menu": "Menú",
+    "nav.close": "Cerrar",
+    "nav.language": "Idioma",
+
+    "hero.role": "Ingeniero de Software",
+    "hero.focus": "De solución a producción",
+    "hero.lede":
+      "Parto del problema de negocio y luego diseño y pongo en producción la solución que lo resuelve: NestJS, .NET, microservicios, Clean Architecture. También administro mi propia infraestructura: este sitio se sirve desde mi homelab con Proxmox.",
+    "hero.proof0": "Monolito → microservicios, en producción en 3 mercados internacionales",
+    "hero.proof1": "~70% menos tiempo de reportes en retail empresarial",
+    "hero.proof2": "1.er lugar, hackathon corporativo RISKTECH 2025",
+    "hero.email": "Escríbeme",
+    "hero.cv": "Descargar CV",
+    "hero.location": "Bogotá, Colombia",
+    "hero.plateTitle": "Consignatario",
+    "hero.plateName": "Nombre",
+    "hero.platePort": "Puerto",
+    "hero.next": "Ver el trabajo",
+
+    "projects.title": "Proyectos",
+    "projects.intro":
+      "Sistemas que he diseñado y puesto en marcha, con el código siempre que puedo compartirlo.",
+    "projects.contents": "Contenido",
+    "projects.repo": "Repositorio",
+    "projects.repos": "Repositorios",
+    "projects.post": "Post en LinkedIn",
+    "projects.video": "Video demo",
+    "projects.figmaClient": "Figma · app clientes",
+    "projects.figmaOwner": "Figma · dueños de local",
+    "projects.private": "Infraestructura privada. Te la muestro si me escribes.",
+    "projects.noLinks": "Código del hackathon bajo los términos del organizador.",
+    "projects.badgeUtadeo": "Proyecto universitario · Utadeo",
+    "projects.badgeWinner": "1.er lugar · hackathon RISKTECH",
+    "projects.badgeLive": "Sirviendo este sitio",
+
+    "projects.store.name": "Tienda: microservicios con NestJS",
+    "projects.store.desc":
+      "E-commerce distribuido con cinco microservicios NestJS comunicados de forma asíncrona por NATS, cada uno con su propia base de datos. Pagos con Stripe vía webhook, imágenes Docker y manifiestos de Kubernetes.",
+    "projects.fraud.name": "Motor de detección de fraude en tiempo real",
+    "projects.fraud.desc":
+      "Construido en 48 horas para transacciones POS bancarias: API de ingesta con NestJS + Python + PostgreSQL, CatBoost para scoring en menos de un segundo con fallback a un encoder BERT en casos dudosos, y enriquecimiento de features con LLMs a JSON estructurado.",
+    "projects.homelab.name": "Nube propia (Proxmox VE)",
+    "projects.homelab.desc":
+      "Virtualización en Proxmox VE con contenedores LXC de Debian y Docker para alojar y probar microservicios. Red zero-trust con Cloudflare Tunnels, DNS propio, TLS automático con Nginx Proxy Manager y subredes aisladas. Este portfolio se despliega aquí desde GitHub Actions.",
+    "projects.anylist.name": "AnyList: API GraphQL con NestJS",
+    "projects.anylist.desc":
+      "API de listas de compra con NestJS y Apollo GraphQL, persistida en PostgreSQL mediante TypeORM. Autenticación JWT con roles, argumentos reutilizables de paginación y búsqueda, y seed de datos de prueba.",
+    "projects.utadelicias.name": "Utadelicias",
+    "projects.utadelicias.desc":
+      "App Android de cupones y domicilios para la comunidad de la Universidad Jorge Tadeo Lozano, destacada en la Feria Tadeísta.",
+    "projects.resnet.name": "Fine-tuning de ResNet",
+    "projects.resnet.desc":
+      "Fine-tuning de una red neuronal ResNet para clasificación de imágenes. El proyecto aparece en la página 3 de la publicación del curso enlazada abajo.",
+
+    "exp.title": "Experiencia",
+    "exp.intro": "De dónde sale el trabajo de arriba.",
+    "exp.present": "Presente",
+    "exp.colPeriod": "Periodo",
+    "exp.colCompany": "Empresa",
+    "exp.colWork": "Trabajo realizado",
+    "exp.geekcore.role": "Ingeniero de Software",
+    "exp.geekcore.period": "Dic. 2024 – Presente",
+    "exp.geekcore.b0":
+      "Diseñé y puse en producción APIs GraphQL y REST con NestJS y ASP.NET Core para una operación de retail multinacional, automatizando flujos de personal y centralizando datos de proveedores y tiendas. El tiempo de reportes bajó ~70%.",
+    "exp.geekcore.b1":
+      "Descompuse un monolito empresarial legado en microservicios modulares, habilitando escalado horizontal y el despliegue en 3 mercados internacionales.",
+    "exp.geekcore.b2":
+      "Construí servicios de trazabilidad para logística de salud: esquemas PostgreSQL diseñados para la carga real y pipelines CI/CD automatizados para disponibilidad continua.",
+    "exp.geekcore.b3":
+      "Suites de pruebas unitarias y de integración bajo Clean Architecture y SOLID en sistemas multi-tenant en producción; sprint planning, revisiones de arquitectura y refinamiento de backlog en equipos ágiles.",
+    "exp.utadeo.role": "Ingeniería de Sistemas",
+    "exp.utadeo.period": "2022 – Mar. 2026",
+    "exp.utadeo.b0":
+      "Graduado en marzo de 2026. Arquitectura de software, algoritmos y métodos formales; proyectos universitarios con usuarios reales (Utadelicias) e investigación en ML (ResNet).",
+
+    "stack.title": "Stack",
+    "stack.intro":
+      "Estibado por categoría. Los bloques sólidos son mi trabajo diario; los de contorno los he usado en proyectos reales.",
+    "stack.cat.core": "Lenguajes y frameworks",
+    "stack.cat.arch": "Arquitectura",
+    "stack.cat.data": "Datos",
+    "stack.cat.infra": "Infraestructura y DevOps",
+    "stack.cat.ai": "Ingeniería asistida por IA",
+    "stack.primary": "Trabajo diario",
+    "stack.secondary": "Usado en proyectos",
+
+    "about.title": "Sobre mí",
+    "about.p0":
+      "Soy Ingeniero de Sistemas especializado en backend: .NET, Node.js y NestJS. Me importan las arquitecturas que siguen limpias cuando el negocio cambia, y entender qué necesita de verdad el cliente antes de escribir el primer endpoint.",
+    "about.p1":
+      "Fuera del trabajo administro un pequeño centro de datos en casa. Proxmox, Docker y Linux son mi forma de llevar el código de la idea a producción sin pedirle un servidor a nadie.",
+    "about.p2":
+      "La IA es parte de mis herramientas, no una palabra de moda: orquesto agentes de código con herdr y trabajo a diario con Claude Code, Codex, Gemini en Antigravity y OpenCode.",
+    "about.languages": "Idiomas",
+    "about.spanish": "Español, nativo",
+    "about.english": "Inglés, nivel profesional (B2)",
+    "about.certs": "Certificaciones",
+    "about.courses": "Cursos",
+    "about.expires": "vigente hasta nov. 2027",
+    "about.coursesList":
+      "Udemy, 2025: NestJS backend escalable · NestJS + microservicios · Nest + GraphQL · Asistentes OpenAI con React + NestJS",
+
+    "contact.title": "Construyamos algo",
+    "contact.text":
+      "Abierto a roles backend y proyectos freelance. Cuéntame qué tiene que hacer el sistema y te digo cómo lo construiría.",
+    "contact.copy": "Copiar correo",
+    "contact.copied": "Copiado",
+
+    "footer.copyright": "© {year} Andrés Gacharná",
+    "footer.hosting":
+      "Servido desde mi propio homelab con Proxmox · desplegado con GitHub Actions",
+    "footer.top": "Volver arriba",
   },
   pt: {
-    // Nav
-    "nav.about": "Sobre mim",
-    "nav.skills": "Habilidades",
     "nav.projects": "Projetos",
     "nav.experience": "Experiência",
+    "nav.stack": "Stack",
+    "nav.about": "Sobre mim",
     "nav.contact": "Contato",
+    "nav.menu": "Menu",
+    "nav.close": "Fechar",
+    "nav.language": "Idioma",
 
-    // Hero
-    "hero.console": "Bem-vindo ao meu portfólio!",
-    "hero.bio": (
-      <>
-        <span style={{ fontWeight: 1000 }}>Engenheiro de Software</span> focado
-        em <span style={{ fontWeight: 1000 }}>soluções de negócios</span>. Não
-        apenas transformo ideias em código funcional, eu me aprofundo na{" "}
-        <span style={{ fontWeight: 1000 }}>lógica e nas necessidades</span> de
-        cada cliente para estruturar soluções alinhadas com seus{" "}
-        <span style={{ fontWeight: 1000 }}>objetivos reais</span>. Minha
-        abordagem vai desde a{" "}
-        <span style={{ fontWeight: 1000 }}>conversa estratégica</span> até o{" "}
-        <span style={{ fontWeight: 1000 }}>deploy técnico</span>, garantindo que
-        cada linha de código traga{" "}
-        <span style={{ fontWeight: 1000 }}>valor real e escalável</span>.
-      </>
-    ),
-    "hero.btnPrimary": "Ver Projetos",
-    "hero.btnOutline": "Contato",
-    "hero.title0": "Desenvolvedor Full Stack",
-    "hero.title1": "Entusiasta UI/UX",
-    "hero.title2": "Engenheiro Criativo",
-    "hero.title3": "Solucionador de Problemas",
+    "hero.role": "Engenheiro de Software",
+    "hero.focus": "Da solução à produção",
+    "hero.lede":
+      "Começo pelo problema de negócio e depois projeto e coloco em produção a solução que o resolve: NestJS, .NET, microsserviços, Clean Architecture. Também administro minha própria infraestrutura: este site é servido do meu homelab com Proxmox.",
+    "hero.proof0": "Monólito → microsserviços, em produção em 3 mercados internacionais",
+    "hero.proof1": "~70% menos tempo de relatórios no varejo corporativo",
+    "hero.proof2": "1º lugar, hackathon corporativo RISKTECH 2025",
+    "hero.email": "Me escreva",
+    "hero.cv": "Baixar CV",
+    "hero.location": "Bogotá, Colômbia",
+    "hero.plateTitle": "Consignatário",
+    "hero.plateName": "Nome",
+    "hero.platePort": "Porto",
+    "hero.next": "Ver o trabalho",
 
-    // About
-    "about.label": "// sobre mim",
-    "about.title": "Sobre Mim",
-    "about.whoami":
-      "Sou um Engenheiro de Sistemas especializado em Backend (.NET, Node.js & NestJS). Sou apaixonado por criar arquiteturas limpas, escaláveis e funcionais. Gosto do mundo DevOps, gerenciando clusters com Proxmox, Docker e Linux para levar o código da ideia à produção.",
-    "about.interests": "const interesses = [",
-    "about.certifications":
-      "- Fortinet Certified Associate em Cibersegurança\n- Scrum Fundamentals Certified\n- NestJS & Microsserviços (Udemy)\n- API OpenAI & React (Udemy)\n- Fundamentos de Marketing Digital (Google)",
-    "about.status": "Pronto para melhorar e inovar projetos",
-    "about.stat0": "De Experiência",
-    "about.stat1": "Certificações",
-    "about.stat2": "Tecnologias",
-    "about.stat3": "Xícaras de Café",
-    "about.stat4": "Anos de Experiência",
-
-    // Tech Stack
-    "tech.label": "// habilidades",
-    "tech.title": "Tech Stack",
-    "tech.cat.frameworks": "Frameworks - Bibliotecas",
-    "tech.cat.architecture": "Architecture & Concepts",
-    "tech.cat.devops": "DevOps & Tools",
-    "tech.cat.languages": "Languages",
-    "tech.cat.databases": "Databases",
-    "tech.layered": "Arquitetura em Camadas",
-
-    // Projects
-    "projects.label": "// trabalho",
     "projects.title": "Projetos",
-    "projects.btnDemo": "👁️ Dar uma olhada",
-    "projects.desc0":
-      "Infraestrutura de nuvem pessoal gerenciada com Proxmox VE. Inclui VPN privada (Tailscale), Nginx Proxy Manager e ambientes Docker para experimentação e microsserviços.",
-    "projects.desc1":
-      "Aplicativo de gerenciamento de tarefas com drag & drop, colaboração em tempo real e notificações.",
-    "projects.desc2":
-      "Ferramenta para gerar portfólios profissionais con templates personalizáveis e deploy automático.",
-    "projects.desc3":
-      "Chat em tempo real com suporte a grupos, arquivos compartilhados e videochamadas.",
-    "projects.desc4":
-      "Aplicativo móvel de cupons e entregas desenvolvido para a comunidade da Universidad Jorge Tadeo Lozano, destacado na Feria Tadeista.",
-    "projects.desc5":
-      "Fine-tuning de uma rede neural ResNet. (Você pode encontrar este projeto na página 3 da publicação dos projetos do curso).",
-    "projects.desc6":
-      "Sistema distribuído de e-commerce com cinco microsserviços NestJS comunicando-se de forma assíncrona via NATS, cada um com seu próprio banco de dados. Inclui pagamentos com Stripe via webhook, empacotamento em Docker e manifestos de Kubernetes.",
-    "projects.name6": "Loja — Microsserviços com NestJS",
-    "projects.name7": "AnyList — API GraphQL com NestJS",
+    "projects.intro":
+      "Sistemas que projetei e coloquei em produção, com o código sempre que posso compartilhá-lo.",
+    "projects.contents": "Conteúdo",
+    "projects.repo": "Repositório",
+    "projects.repos": "Repositórios",
+    "projects.post": "Post no LinkedIn",
+    "projects.video": "Vídeo demo",
+    "projects.figmaClient": "Figma · app clientes",
+    "projects.figmaOwner": "Figma · donos de loja",
+    "projects.private": "Infraestrutura privada. Mostro se você me escrever.",
+    "projects.noLinks": "Código do hackathon sob os termos do organizador.",
     "projects.badgeUtadeo": "Projeto universitário · Utadeo",
-    "projects.desc7":
-      "API de listas de compras construída com NestJS e GraphQL sobre Apollo Server, com persistência em PostgreSQL via TypeORM. Inclui autenticação JWT com funções, argumentos reutilizáveis de paginação e busca, e seed de dados de teste.",
+    "projects.badgeWinner": "1º lugar · hackathon RISKTECH",
+    "projects.badgeLive": "Servindo este site",
 
-    // Experience
-    "exp.label": "// trajetória",
-    "exp.title": "Journey",
-    "exp.date0": "Dez. 2024 - Presente",
-    "exp.role0": "Software Engineer / Backend Developer",
-    "exp.desc0":
-      "Desenvolvimento de soluções backend robustas e escaláveis orientadas a microsserviços. Participação no ciclo de vida do desenvolvimento de software, aplicando boas práticas e arquiteturas limpas.",
-    "exp.date1": "2022 - Mar. 2026",
-    "exp.role1": "Formação - Engenharia de Sistemas",
-    "exp.desc1":
-      "Desenvolvimento de bases sólidas em programação, algoritmos e resolução de problemas. Foco em arquitetura de software e metodologias formais.",
-    "exp.date2": "Jan. 2024",
-    "exp.role2": "Desenvolvimento de Visão de Negócios",
-    "exp.desc2":
-      "Certificação em Criação de Empresas. Aprendizado sobre como dirigir negócios rentáveis, conectando soluções técnicas com os objetivos-chave da empresa.",
-    "exp.date3": "2023 - 2025",
-    "exp.role3": "Backend & Cibersegurança",
-    "exp.desc3":
-      "Certificações robustas em NestJS, design de Microsserviços, implementação de GraphQL e cibersegurança com Fortinet.",
-    "exp.date4": "2026 - Presente",
-    "exp.role4": "Proxmox, Docker & Infraestrutura",
-    "exp.desc4":
-      "Administração de Data Center próprio utilizando Proxmox. Configuração de VPNs, serviços em nuvem privada e deploys con containers Docker para ambientes controlados de microsserviços.",
+    "projects.store.name": "Loja: microsserviços com NestJS",
+    "projects.store.desc":
+      "E-commerce distribuído com cinco microsserviços NestJS comunicando-se de forma assíncrona via NATS, cada um com seu próprio banco de dados. Pagamentos com Stripe via webhook, imagens Docker e manifestos de Kubernetes.",
+    "projects.fraud.name": "Motor de detecção de fraude em tempo real",
+    "projects.fraud.desc":
+      "Construído em 48 horas para transações POS bancárias: API de ingestão com NestJS + Python + PostgreSQL, CatBoost para scoring em menos de um segundo com fallback para um encoder BERT nos casos duvidosos, e enriquecimento de features com LLMs em JSON estruturado.",
+    "projects.homelab.name": "Nuvem própria (Proxmox VE)",
+    "projects.homelab.desc":
+      "Virtualização no Proxmox VE com contêineres LXC Debian e Docker para hospedar e testar microsserviços. Rede zero-trust com Cloudflare Tunnels, DNS próprio, TLS automático via Nginx Proxy Manager e sub-redes isoladas. Este portfólio é implantado aqui pelo GitHub Actions.",
+    "projects.anylist.name": "AnyList: API GraphQL com NestJS",
+    "projects.anylist.desc":
+      "API de listas de compras com NestJS e Apollo GraphQL, persistida em PostgreSQL via TypeORM. Autenticação JWT com papéis, argumentos reutilizáveis de paginação e busca, e seed de dados de teste.",
+    "projects.utadelicias.name": "Utadelicias",
+    "projects.utadelicias.desc":
+      "App Android de cupons e entregas para a comunidade da Universidad Jorge Tadeo Lozano, destaque na Feria Tadeísta.",
+    "projects.resnet.name": "Fine-tuning de ResNet",
+    "projects.resnet.desc":
+      "Fine-tuning de uma rede neural ResNet para classificação de imagens. O projeto aparece na página 3 da publicação do curso no link abaixo.",
 
-    "exp.date5": "Fev. 2025",
-    "exp.role5": "Nest: Desenvolvimento Backend Escalável com Node",
-    "exp.desc5":
-      "Curso prático de NestJS na Udemy. Construção de APIs REST robustas e escaláveis usando Node.js com o framework NestJS.",
+    "exp.title": "Experiência",
+    "exp.intro": "De onde vem o trabalho acima.",
+    "exp.present": "Presente",
+    "exp.colPeriod": "Período",
+    "exp.colCompany": "Empresa",
+    "exp.colWork": "Trabalho realizado",
+    "exp.geekcore.role": "Engenheiro de Software",
+    "exp.geekcore.period": "Dez. 2024 – Presente",
+    "exp.geekcore.b0":
+      "Projetei e coloquei em produção APIs GraphQL e REST com NestJS e ASP.NET Core para uma operação de varejo multinacional, automatizando fluxos de pessoal e centralizando dados de fornecedores e lojas. O tempo de relatórios caiu ~70%.",
+    "exp.geekcore.b1":
+      "Decompus um monólito corporativo legado em microsserviços modulares, permitindo escala horizontal e a expansão para 3 mercados internacionais.",
+    "exp.geekcore.b2":
+      "Construí serviços de rastreamento para logística de saúde: esquemas PostgreSQL desenhados para a carga real e pipelines CI/CD automatizados para disponibilidade contínua.",
+    "exp.geekcore.b3":
+      "Suítes de testes unitários e de integração sob Clean Architecture e SOLID em sistemas multi-tenant em produção; sprint planning, revisões de arquitetura e refinamento de backlog em times ágeis.",
+    "exp.utadeo.role": "Engenharia de Sistemas",
+    "exp.utadeo.period": "2022 – Mar. 2026",
+    "exp.utadeo.b0":
+      "Formado em março de 2026. Arquitetura de software, algoritmos e métodos formais; projetos universitários com usuários reais (Utadelicias) e pesquisa em ML (ResNet).",
 
-    "exp.date6": "Set. 2025",
-    "exp.role6": "NestJS + Microsserviços: Aplicações Escaláveis e Modulares",
-    "exp.desc6":
-      "Design e implementação de arquiteturas de microsserviços com NestJS, comunicação entre serviços e padrões de escalabilidade.",
+    "stack.title": "Stack",
+    "stack.intro":
+      "Estivado por categoria. Blocos sólidos são meu trabalho diário; os contornados já usei em projetos reais.",
+    "stack.cat.core": "Linguagens e frameworks",
+    "stack.cat.arch": "Arquitetura",
+    "stack.cat.data": "Dados",
+    "stack.cat.infra": "Infraestrutura e DevOps",
+    "stack.cat.ai": "Engenharia assistida por IA",
+    "stack.primary": "Trabalho diário",
+    "stack.secondary": "Usado em projetos",
 
-    "exp.date7": "Out. 2025",
-    "exp.role7": "Nest + GraphQL: Evolua suas APIs",
-    "exp.desc7":
-      "Integração de GraphQL em aplicações NestJS para construir APIs flexíveis e eficientes.",
+    "about.title": "Sobre mim",
+    "about.p0":
+      "Sou Engenheiro de Sistemas especializado em backend: .NET, Node.js e NestJS. Me importo com arquiteturas que continuam limpas quando o negócio muda, e com entender o que o cliente realmente precisa antes de escrever o primeiro endpoint.",
+    "about.p1":
+      "Fora do trabalho administro um pequeno data center em casa. Proxmox, Docker e Linux são como levo o código da ideia à produção sem pedir um servidor a ninguém.",
+    "about.p2":
+      "IA faz parte das minhas ferramentas, não é palavra da moda: orquestro agentes de código com herdr e trabalho diariamente com Claude Code, Codex, Gemini no Antigravity e OpenCode.",
+    "about.languages": "Idiomas",
+    "about.spanish": "Espanhol, nativo",
+    "about.english": "Inglês, nível profissional (B2)",
+    "about.certs": "Certificações",
+    "about.courses": "Cursos",
+    "about.expires": "válida até nov. 2027",
+    "about.coursesList":
+      "Udemy, 2025: NestJS backend escalável · NestJS + microsserviços · Nest + GraphQL · Assistentes OpenAI com React + NestJS",
 
-    "exp.date8": "Out. 2025",
-    "exp.role8": "OpenAI: Exercícios Práticos e Assistentes com React + NestJS",
-    "exp.desc8":
-      "Integração da API OpenAI para desenvolver assistentes inteligentes usando React no frontend e NestJS no backend.",
+    "contact.title": "Vamos construir algo",
+    "contact.text":
+      "Aberto a vagas de backend e projetos freelance. Me conte o que o sistema precisa fazer e eu digo como o construiria.",
+    "contact.copy": "Copiar e-mail",
+    "contact.copied": "Copiado",
 
-    "exp.date9": "Nov. 2025",
-    "exp.role9": "Scrum Fundamentals Certified",
-    "exp.desc9":
-      "Certificação nos fundamentos da metodologia Scrum, incluindo papéis, eventos e artefatos do framework ágil.",
-
-    "exp.date10": "Nov. 2025 · Vencimento: Nov. 2027",
-    "exp.role10": "Fortinet Certified Associate em Cibersegurança",
-    "exp.desc10":
-      "Certificação oficial da Fortinet em cibersegurança, cobrindo fundamentos de segurança de redes, ameaças e controles de defesa.",
-
-    // Contact
-    "contact.label": "// contato",
-    "contact.title": "Entre em Contato",
-    "contact.cardTitle": "Pronto para subir de nível?",
-    "contact.cardText": "Vamos construir algo juntos!",
-
-    // Footer
-    "footer.tagline": "Criado com paixão & pixels",
-    "footer.nav": "Navegação",
-    "footer.connect": "Contato",
-    "footer.madeWith": "Feito com ♥ e muito ☕",
-    "footer.copyright": "© {year} Andrés Gacharná.",
+    "footer.copyright": "© {year} Andrés Gacharná",
+    "footer.hosting":
+      "Servido do meu próprio homelab com Proxmox · implantado com GitHub Actions",
+    "footer.top": "Voltar ao topo",
   },
 };
+
+const STORAGE_KEY = "portfolio-language";
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<Language>("en");
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("portfolio-language") as Language;
+      const saved = localStorage.getItem(STORAGE_KEY);
       if (saved === "es" || saved === "en" || saved === "pt") {
+        // Read after hydration so server and client render the same first frame.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setLanguage(saved);
       }
-    } catch (e) {
-      console.warn("localStorage access denied");
+    } catch {
+      // Storage blocked: stay on the default language.
     }
   }, []);
+
+  useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
 
   const changeLanguage = useCallback((lang: Language) => {
     setLanguage(lang);
     try {
-      localStorage.setItem("portfolio-language", lang);
-    } catch (e) {
-      console.warn("localStorage access denied");
+      localStorage.setItem(STORAGE_KEY, lang);
+    } catch {
+      // Storage blocked: the choice lasts for this visit only.
     }
   }, []);
 
   const t = useCallback(
-    (key: string) => {
-      const langTrans = translations[language] as any;
-      return langTrans[key] || key;
-    },
+    (key: string) => translations[language][key] ?? translations.en[key] ?? key,
     [language],
   );
 

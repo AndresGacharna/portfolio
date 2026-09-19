@@ -1,238 +1,270 @@
 "use client";
 
-import GlitchText from "./GlitchText";
-import ScrollReveal from "./ScrollReveal";
 import Image from "next/image";
+import type { CSSProperties, ReactNode } from "react";
 import styles from "./Projects.module.css";
 import { useLanguage } from "@/context/LanguageContext";
+import { containerId } from "@/lib/iso6346";
+import {
+  ArrowUpRight,
+  FigmaIcon,
+  GitHubIcon,
+  LinkedInIcon,
+  PlayIcon,
+} from "./Icons";
 
-interface ProjectItem {
-  /** Identificador estable: se usa como key de React y como fallback del título. */
-  name: string;
-  /** Opcional: solo para nombres que cambian de idioma. Los propios no la llevan. */
-  nameKey?: string;
-  descKey: string;
-  tech: string[];
-  gradient: string;
-  image?: string;
-  demo?: string;
-  code?: string;
-  linkedin?: string;
-  extraLinks?: { label: string; url: string }[];
-  imageFit?: "cover" | "contain";
-  imageBg?: string;
-  imageAspect?: string;
-  badgeKey?: string;
+type LinkKind = "repo" | "post" | "video" | "figma";
+
+interface ProjectLink {
+  kind: LinkKind;
+  labelKey: string;
+  href: string;
 }
 
-const projects: ProjectItem[] = [
+interface Project {
+  /** Translation base: projects.<slug>.name / .desc */
+  slug: string;
+  sizeType: "22G1" | "45G1";
+  paint: string;
+  /** Ink that reads on the paint */
+  onPaint: "dark" | "light";
+  image?: string;
+  /** Big stencil marking for containers without a picture */
+  marking?: string;
+  badgeKey?: string;
+  noteKey?: string;
+  contents: string[];
+  links: ProjectLink[];
+}
+
+const projects: Project[] = [
   {
-    name: "Home Data Center (Homelab / Proxmox VE)",
-    descKey: "projects.desc0",
-    tech: ["Proxmox", "Linux", "Docker", "Tailscale", "Nginx Proxy Manager"],
-    gradient: "linear-gradient(135deg, #ff134c 0%, #ff6b6b 100%)",
-    image: "/images/homelab-project.jpg",
-    imageAspect: "1600 / 679",
-    linkedin:
-      "https://www.linkedin.com/feed/update/urn:li:activity:7452028850974113793/",
-    code: "#",
-  },
-  {
-    name: "Tienda — Microservicios con NestJS",
-    nameKey: "projects.name6",
-    descKey: "projects.desc6",
-    tech: ["NestJS", "NATS", "Prisma", "Docker", "Kubernetes", "Stripe"],
-    gradient: "linear-gradient(135deg, #e0234e 0%, #326ce5 100%)",
+    slug: "store",
+    sizeType: "45G1",
+    paint: "var(--paint-nest-red)",
+    onPaint: "light",
     image: "/images/microservices-nest-project.jpg",
-    imageAspect: "1600 / 679",
-    code: "https://github.com/Nest-Microservices-AndresGach",
-  },
-  {
-    name: "AnyList — API GraphQL con NestJS",
-    nameKey: "projects.name7",
-    descKey: "projects.desc7",
-    tech: ["NestJS", "GraphQL", "Apollo", "TypeORM", "PostgreSQL", "JWT"],
-    gradient: "linear-gradient(135deg, #e535ab 0%, #e0234e 100%)",
-    image: "/images/graphql-nest-project.jpg",
-    imageAspect: "1600 / 679",
-    code: "https://github.com/AndresGacharna/Nest-graphql",
-  },
-  {
-    name: "Utadelicias",
-    descKey: "projects.desc4",
-    tech: ["Kotlin", "Firebase", "Android Studio", "Figma"],
-    gradient: "linear-gradient(135deg, #f59e0b 0%, #ff134c 100%)",
-    image: "/images/utadelicias-app-larga.jpg",
-    imageAspect: "1584 / 672",
-    badgeKey: "projects.badgeUtadeo",
-    demo: "https://youtu.be/xmISuETa1Dg",
-    code: "https://github.com/AndresGacharna/utadeliciasApp",
-    linkedin:
-      "https://www.linkedin.com/posts/andr%C3%A9s-gacharn%C3%A1-a455a5285_agradecido-con-mis-compa%C3%B1eros-por-hacer-parte-activity-7263284403563384833-R5oU?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEVSHZUBMIzgp6HgEvebGVf-4Owv5mXnlJY",
-    extraLinks: [
+    contents: ["NestJS", "NATS", "Prisma", "Docker", "Kubernetes", "Stripe"],
+    links: [
       {
-        label: "Figma (Cliente)",
-        url: "https://www.figma.com/proto/Gf9cXrq0eoOZEKgV28fllm/Dise%C3%B1o-version-Clientes?node-id=601-19&p=f&t=weYRSocE17HVWAi5-0&scaling=min-zoom&content-scaling=fixed&page-id=1669%3A162202&starting-point-node-id=2694%3A30&show-proto-sidebar=1",
-      },
-      {
-        label: "Figma (Dueños Local)",
-        url: "https://www.figma.com/proto/f8E1qu1ZHMOqeNpa6ZvkkM/Dise%C3%B1o-version-due%C3%B1os-local?node-id=2-2&starting-point-node-id=2%3A19",
+        kind: "repo",
+        labelKey: "projects.repos",
+        href: "https://github.com/Nest-Microservices-AndresGach",
       },
     ],
   },
   {
-    name: "ResNet Fine-tuning",
-    descKey: "projects.desc5",
-    tech: ["Python", "ResNet", "Machine Learning"],
-    gradient: "linear-gradient(135deg, #10b981 0%, #3b82f6 100%)",
-    image: "/images/resnet-fine-tunning.jpg",
-    imageAspect: "1584 / 672",
+    slug: "fraud",
+    sizeType: "22G1",
+    paint: "var(--paint-cert-gold)",
+    onPaint: "dark",
+    image: "/images/risktech.jpg",
+    badgeKey: "projects.badgeWinner",
+    contents: ["NestJS", "Python", "PostgreSQL", "CatBoost", "BERT", "LLM APIs"],
+    links: [
+      {
+        kind: "post",
+        labelKey: "projects.post",
+        href: "https://lnkd.in/p/eSgqX5cE",
+      },
+    ],
+  },
+  {
+    slug: "homelab",
+    sizeType: "45G1",
+    paint: "var(--paint-proxmox-teal)",
+    onPaint: "light",
+    image: "/images/homelab-project.jpg",
+    badgeKey: "projects.badgeLive",
+    noteKey: "projects.private",
+    contents: [
+      "Proxmox VE",
+      "Debian LXC",
+      "Docker",
+      "Cloudflare Tunnels",
+      "Nginx Proxy Manager",
+      "Tailscale",
+    ],
+    links: [
+      {
+        kind: "post",
+        labelKey: "projects.post",
+        href: "https://www.linkedin.com/feed/update/urn:li:activity:7452028850974113793/",
+      },
+    ],
+  },
+  {
+    slug: "anylist",
+    sizeType: "22G1",
+    paint: "var(--paint-graphql-magenta)",
+    onPaint: "light",
+    image: "/images/graphql-nest-project.jpg",
+    contents: ["NestJS", "GraphQL", "Apollo", "TypeORM", "PostgreSQL", "JWT"],
+    links: [
+      {
+        kind: "repo",
+        labelKey: "projects.repo",
+        href: "https://github.com/AndresGacharna/Nest-graphql",
+      },
+    ],
+  },
+  {
+    slug: "utadelicias",
+    sizeType: "45G1",
+    paint: "var(--paint-utadeo-blue)",
+    onPaint: "light",
+    image: "/images/utadelicias-app-larga.jpg",
     badgeKey: "projects.badgeUtadeo",
-    linkedin:
-      "https://www.linkedin.com/posts/olmerg_ia-2024i-utadeo-ugcPost-7197207389601710080-av-x/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEVSHZUBMIzgp6HgEvebGVf-4Owv5mXnlJY",
+    contents: ["Kotlin", "Firebase", "Android Studio", "Figma"],
+    links: [
+      {
+        kind: "repo",
+        labelKey: "projects.repo",
+        href: "https://github.com/AndresGacharna/utadeliciasApp",
+      },
+      {
+        kind: "video",
+        labelKey: "projects.video",
+        href: "https://youtu.be/xmISuETa1Dg",
+      },
+      {
+        kind: "figma",
+        labelKey: "projects.figmaClient",
+        href: "https://www.figma.com/proto/Gf9cXrq0eoOZEKgV28fllm/Dise%C3%B1o-version-Clientes?node-id=601-19&p=f&t=weYRSocE17HVWAi5-0&scaling=min-zoom&content-scaling=fixed&page-id=1669%3A162202&starting-point-node-id=2694%3A30&show-proto-sidebar=1",
+      },
+      {
+        kind: "figma",
+        labelKey: "projects.figmaOwner",
+        href: "https://www.figma.com/proto/f8E1qu1ZHMOqeNpa6ZvkkM/Dise%C3%B1o-version-due%C3%B1os-local?node-id=2-2&starting-point-node-id=2%3A19",
+      },
+      {
+        kind: "post",
+        labelKey: "projects.post",
+        href: "https://www.linkedin.com/posts/andr%C3%A9s-gacharn%C3%A1-a455a5285_agradecido-con-mis-compa%C3%B1eros-por-hacer-parte-activity-7263284403563384833-R5oU",
+      },
+    ],
+  },
+  {
+    slug: "resnet",
+    sizeType: "22G1",
+    paint: "var(--paint-resnet-indigo)",
+    onPaint: "light",
+    image: "/images/resnet-fine-tunning.jpg",
+    badgeKey: "projects.badgeUtadeo",
+    contents: ["Python", "ResNet", "Machine Learning"],
+    links: [
+      {
+        kind: "post",
+        labelKey: "projects.post",
+        href: "https://www.linkedin.com/posts/olmerg_ia-2024i-utadeo-ugcPost-7197207389601710080-av-x/",
+      },
+    ],
   },
 ];
+
+const linkIcons: Record<LinkKind, ReactNode> = {
+  repo: <GitHubIcon />,
+  post: <LinkedInIcon />,
+  video: <PlayIcon />,
+  figma: <FigmaIcon />,
+};
 
 export default function Projects() {
   const { t } = useLanguage();
 
   return (
-    <section className={styles.projects} id="projects">
-      <div className="container">
-        <ScrollReveal>
-          <div className="section-header">
-            <span className="section-label">{t("projects.label")}</span>
-            <GlitchText as="h2" className="section-title">
-              {t("projects.title")}
-            </GlitchText>
-          </div>
-        </ScrollReveal>
+    <section id="projects" className={styles.section}>
+      <div className="wrap">
+        <header className={styles.header}>
+          <h2 className="yard-heading">{t("projects.title")}</h2>
+          <p className={styles.intro}>{t("projects.intro")}</p>
+        </header>
 
-        <div className={styles.projectGrid}>
+        <ol className={styles.stack}>
           {projects.map((project, i) => {
-            const overlayHref = [
-              project.demo,
-              project.linkedin,
-              project.code,
-            ].find((url) => url && url !== "#");
-
-            const title = project.nameKey
-              ? t(project.nameKey)
-              : project.name;
+            const id = containerId("AGCU", i + 2);
+            const name = t(`projects.${project.slug}.name`);
 
             return (
-              <ScrollReveal key={project.name} delay={i * 0.1}>
-                <div className={styles.projectCard}>
-                  <div
-                    className={styles.projectImage}
-                    style={
-                      project.imageAspect
-                        ? { height: "auto", aspectRatio: project.imageAspect }
-                        : undefined
-                    }
-                  >
-                    {project.image ? (
+              <li
+                key={project.slug}
+                className={styles.container}
+                data-on-paint={project.onPaint}
+                style={{ "--paint": project.paint } as CSSProperties}
+              >
+                <div className={`${styles.side} corrugated`}>
+                  <div className={styles.sideMarks} aria-hidden="true">
+                    <span className={styles.code}>
+                      {id.owner} {id.serial}{" "}
+                      <span className={styles.check}>{id.check}</span>
+                    </span>
+                    <span>{project.sizeType}</span>
+                  </div>
+
+                  <h3 className={styles.name}>{name}</h3>
+
+                  {project.badgeKey && (
+                    <p className={styles.placard}>{t(project.badgeKey)}</p>
+                  )}
+
+                  {project.image ? (
+                    <div className={styles.hatch}>
                       <Image
                         src={project.image}
-                        alt={title}
+                        alt=""
                         fill
-                        style={{
-                          objectFit: project.imageFit || "contain",
-                          backgroundColor: project.imageBg || "transparent",
-                        }}
-                        className={styles.projectImageContent}
+                        unoptimized
+                        sizes="(max-width: 900px) 92vw, 700px"
                       />
-                    ) : (
-                      <div
-                        className={styles.projectGradient}
-                        style={{ background: project.gradient }}
-                      />
-                    )}
-                    <div className={styles.projectOverlay}>
-                      {overlayHref && (
-                        <a
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          href={overlayHref}
-                          className={styles.overlayLink}
-                        >
-                          {t("projects.btnDemo")}
-                        </a>
-                      )}
                     </div>
+                  ) : (
+                    <p className={styles.marking} aria-hidden="true">
+                      {project.marking}
+                    </p>
+                  )}
+                </div>
+
+                <div className={styles.manifest}>
+                  <p className={styles.desc}>
+                    {t(`projects.${project.slug}.desc`)}
+                  </p>
+
+                  <div className={styles.plate}>
+                    <p className={styles.plateTitle}>{t("projects.contents")}</p>
+                    <ul className={styles.contents}>
+                      {project.contents.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
                   </div>
 
-                  <div className={styles.projectContent}>
-                    {project.badgeKey && (
-                      <span className={styles.projectBadge}>
-                        {t(project.badgeKey)}
-                      </span>
-                    )}
-                    <h3 className={styles.projectName}>{title}</h3>
-                    <p className={styles.projectDesc}>{t(project.descKey)}</p>
-
-                    <div className={styles.projectTags}>
-                      {project.tech.map((tag) => (
-                        <span key={tag} className="tag">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className={styles.projectLinks}>
-                      {project.demo && project.demo !== "#" && (
-                        <a
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          href={project.demo}
-                          className={styles.projectLink}
-                        >
-                          {project.demo.includes("figma.com")
-                            ? "Figma"
-                            : project.demo.includes("youtu")
-                              ? "YouTube"
-                              : t("projects.btnDemo")}
-                        </a>
-                      )}
-                      {project.extraLinks &&
-                        project.extraLinks.map((link) => (
+                  {project.links.length > 0 && (
+                    <ul className={styles.handles}>
+                      {project.links.map((link) => (
+                        <li key={link.href}>
                           <a
-                            key={link.label}
+                            className="handle"
+                            href={link.href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            href={link.url}
-                            className={styles.projectLink}
                           >
-                            {link.label}
+                            {linkIcons[link.kind]}
+                            {t(link.labelKey)}
+                            <ArrowUpRight className="handle-arrow" />
                           </a>
-                        ))}
-                      {project.code && project.code !== "#" && (
-                        <a
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          href={project.code}
-                          className={styles.projectLink}
-                        >
-                          GitHub
-                        </a>
-                      )}
-                      {project.linkedin && (
-                        <a
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          href={project.linkedin}
-                          className={styles.projectLink}
-                        >
-                          LinkedIn
-                        </a>
-                      )}
-                    </div>
-                  </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+
+                  {project.noteKey && (
+                    <p className={styles.note}>{t(project.noteKey)}</p>
+                  )}
                 </div>
-              </ScrollReveal>
+              </li>
             );
           })}
-        </div>
+        </ol>
       </div>
     </section>
   );
