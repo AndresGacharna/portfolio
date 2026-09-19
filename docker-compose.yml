@@ -1,5 +1,9 @@
 services:
   portfolio:
+    # Imagen publicada por GitHub Actions en cada push a main.
+    # En el servidor: docker compose pull && docker compose up -d
+    image: ghcr.io/andresgacharna/portfolio:latest
+    # Solo se usa en local (docker compose up --build); el servidor nunca compila.
     build:
       context: .
       dockerfile: Dockerfile

@@ -1,26 +1,84 @@
 name: Deploy to LXC
 
-# Esto indica que el workflow se ejecutará cuando hagas push a la rama "main"
+# Se ejecuta en cada push a main: construye la imagen, la publica en GHCR
+# y le dice al LXC (por Tailscale) que se baje la nueva y reinicie.
 on:
   push:
     branches: ["main"]
+  workflow_dispatch:
+
+env:
+  IMAGE: ghcr.io/${{ github.repository }}
 
 jobs:
+  build:
+    name: Build y push a GHCR
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login en GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Genera los tags en minúsculas (GHCR no acepta mayúsculas en el nombre)
+      - name: Calcular tags
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE }}
+          tags: |
+            type=raw,value=latest
+            type=sha,format=long
+
+      - name: Build y push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          # Cachea las capas entre runs para que el build no empiece de cero
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
   deploy:
+    name: Desplegar en el LXC
+    needs: build
     runs-on: ubuntu-latest
 
     steps:
+      # El runner se une al tailnet como nodo efímero: no hace falta
+      # abrir ningún puerto al exterior ni pasar por Cloudflare.
+      - name: Conectar a Tailscale
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
       - name: Ejecutar despliegue vía SSH
-        # Usamos una acción muy popular y probada de la comunidad para conexiones SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          # Aquí van exactamente los mismos comandos que usarías tú manualmente
           script: |
+            set -e
             cd /root/portfolio
+            # git pull solo para tener el docker-compose.yml al día
             git pull origin main
-            docker compose up -d --build
-            # (Opcional) Limpiar imágenes viejas que queden huérfanas tras el build:
+            docker compose pull
+            docker compose up -d
             docker image prune -f
