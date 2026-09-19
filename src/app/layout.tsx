@@ -1,47 +1,52 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Barlow, Barlow_Condensed, Big_Shoulders_Stencil } from "next/font/google";
 import "./globals.css";
-import BackgroundGradient from "@/components/BackgroundGradient";
 
-const spaceGrotesk = Space_Grotesk({
+const stencil = Big_Shoulders_Stencil({
+  subsets: ["latin"],
+  variable: "--font-stencil",
+  display: "swap",
+  axes: ["opsz"],
+});
+
+const barlow = Barlow({
   subsets: ["latin"],
   variable: "--font-body",
   display: "swap",
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const barlowCondensed = Barlow_Condensed({
   subsets: ["latin"],
-  variable: "--font-mono",
+  variable: "--font-cond",
   display: "swap",
-  weight: ["400", "500", "600"],
+  weight: ["500", "600", "700"],
 });
+
+const description =
+  "Andrés Gacharná, Software Engineer (Backend & Distributed Systems). NestJS, .NET, microservices, Clean Architecture and self-hosted infrastructure.";
 
 export const metadata: Metadata = {
-  title: "Andrés Gacharná | Full Stack Developer",
-  description:
-    "Portafolio de desarrollador Full Stack. Creando experiencias digitales únicas con código, creatividad y pasión.",
+  title: "Andrés Gacharná | Backend & Distributed Systems",
+  description,
   keywords: [
-    "developer",
+    "backend engineer",
+    "distributed systems",
+    "NestJS",
+    ".NET",
+    "microservices",
     "portfolio",
-    "full stack",
-    "react",
-    "next.js",
-    "typescript",
   ],
   authors: [{ name: "Andrés Gacharná" }],
   openGraph: {
-    title: "Andrés Gacharná | Full Stack Developer",
-    description:
-      "Portafolio de desarrollador Full Stack. Creando experiencias digitales únicas.",
+    title: "Andrés Gacharná | Backend & Distributed Systems",
+    description,
     type: "website",
-    locale: "es_ES",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Andrés Gacharná | Full Stack Developer",
-    description:
-      "Portafolio de desarrollador Full Stack. Creando experiencias digitales únicas.",
+    title: "Andrés Gacharná | Backend & Distributed Systems",
+    description,
   },
 };
 
@@ -52,15 +57,10 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="es"
-      className={`${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
+      lang="en"
+      className={`${stencil.variable} ${barlow.variable} ${barlowCondensed.variable}`}
     >
-      <body>
-        <BackgroundGradient />
-        <div style={{ position: "relative", zIndex: 1 }}>
-          {children}
-        </div>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

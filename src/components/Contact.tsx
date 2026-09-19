@@ -1,56 +1,67 @@
 "use client";
 
-import GlitchText from "./GlitchText";
-import ScrollReveal from "./ScrollReveal";
+import { useState } from "react";
 import styles from "./Contact.module.css";
 import { useLanguage } from "@/context/LanguageContext";
-
-const socials = [
-  { icon: "⌘", label: "GitHub", href: "https://github.com/AndresGacharna" },
-  {
-    icon: "◆",
-    label: "LinkedIn",
-    href: "https://www.linkedin.com/in/andr%C3%A9s-gacharn%C3%A1-a455a5285/",
-  },
-  { icon: "✉", label: "Email", href: "mailto:andrestibochero@hotmail.com" },
-];
+import { contact } from "@/lib/contact";
+import { ArrowUpRight, GitHubIcon, LinkedInIcon, MailIcon } from "./Icons";
 
 export default function Contact() {
   const { t } = useLanguage();
+  const [copied, setCopied] = useState(false);
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(contact.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      window.location.href = `mailto:${contact.email}`;
+    }
+  };
 
   return (
-    <section className={styles.contact} id="contact">
-      <div className="container">
-        <ScrollReveal>
-          <div className="section-header">
-            <span className="section-label">{t("contact.label")}</span>
-            <GlitchText as="h2" className="section-title">
-              {t("contact.title")}
-            </GlitchText>
-          </div>
-        </ScrollReveal>
+    <section id="contact" className={`${styles.section} corrugated`}>
+      <div className={`wrap ${styles.inner}`}>
+        <h2 className={styles.title}>{t("contact.title")}</h2>
+        <p className={styles.text}>{t("contact.text")}</p>
 
-        <ScrollReveal delay={0.1}>
-          <div className={styles.contactCard}>
-            <h3 className={styles.contactHeading}>{t("contact.cardTitle")}</h3>
-            <p className={styles.contactText}>{t("contact.cardText")}</p>
+        <a className={styles.email} href={`mailto:${contact.email}`}>
+          {contact.email}
+        </a>
 
-            <div className={styles.socialLinks}>
-              {socials.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  className={styles.socialLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span className={styles.socialIcon}>{social.icon}</span>
-                  {social.label}
-                </a>
-              ))}
-            </div>
-          </div>
-        </ScrollReveal>
+        <div className={styles.handles}>
+          <a className="handle handle--light handle--big" href={`mailto:${contact.email}`}>
+            <MailIcon />
+            {t("hero.email")}
+          </a>
+          <button type="button" className="handle handle--big" onClick={copyEmail}>
+            {copied ? t("contact.copied") : t("contact.copy")}
+          </button>
+          <a
+            className="handle handle--big"
+            href={contact.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <LinkedInIcon />
+            LinkedIn
+            <ArrowUpRight className="handle-arrow" />
+          </a>
+          <a
+            className="handle handle--big"
+            href={contact.github}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <GitHubIcon />
+            GitHub
+            <ArrowUpRight className="handle-arrow" />
+          </a>
+        </div>
+        <p className={styles.status} role="status" aria-live="polite">
+          {copied ? t("contact.copied") : ""}
+        </p>
       </div>
     </section>
   );
