@@ -10,8 +10,8 @@ import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import { LanguageProvider } from "@/context/LanguageContext";
 
-// Drop a PDF at public/cv.pdf and the hero shows a download handle.
-const CV_FILE = "cv.pdf";
+// Drop a PDF at public/documents/ and the CV download handles show up.
+const CV_FILE = "documents/Andres_Gacharna_CV.pdf";
 const cvHref = existsSync(path.join(process.cwd(), "public", CV_FILE))
   ? `/${CV_FILE}`
   : undefined;
@@ -26,7 +26,7 @@ export default function Home() {
         <Experience />
         <TechStack />
         <About />
-        <Contact />
+        <Contact cvHref={cvHref} />
       </main>
       <Footer />
     </LanguageProvider>

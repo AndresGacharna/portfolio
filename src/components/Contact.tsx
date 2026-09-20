@@ -4,9 +4,15 @@ import { useState } from "react";
 import styles from "./Contact.module.css";
 import { useLanguage } from "@/context/LanguageContext";
 import { contact } from "@/lib/contact";
-import { ArrowUpRight, GitHubIcon, LinkedInIcon, MailIcon } from "./Icons";
+import {
+  ArrowUpRight,
+  DocumentIcon,
+  GitHubIcon,
+  LinkedInIcon,
+  MailIcon,
+} from "./Icons";
 
-export default function Contact() {
+export default function Contact({ cvHref }: { cvHref?: string }) {
   const { t } = useLanguage();
   const [copied, setCopied] = useState(false);
 
@@ -38,6 +44,12 @@ export default function Contact() {
           <button type="button" className="handle handle--big" onClick={copyEmail}>
             {copied ? t("contact.copied") : t("contact.copy")}
           </button>
+          {cvHref && (
+            <a className="handle handle--big" href={cvHref} download>
+              <DocumentIcon />
+              {t("hero.cv")}
+            </a>
+          )}
           <a
             className="handle handle--big"
             href={contact.linkedin}
