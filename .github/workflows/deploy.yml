@@ -61,12 +61,15 @@ jobs:
     steps:
       # El runner se une al tailnet como nodo efímero: no hace falta
       # abrir ningún puerto al exterior ni pasar por Cloudflare.
+      # --accept-routes es imprescindible: el LXC no está en el tailnet,
+      # se llega a él por las rutas que anuncia el subnet router.
       - name: Conectar a Tailscale
         uses: tailscale/github-action@v3
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
+          args: --accept-routes
 
       - name: Ejecutar despliegue vía SSH
         uses: appleboy/ssh-action@v1.0.3
